@@ -45,4 +45,5 @@
       (quick-fill-submit {"[name=q]" clear}
                          {"[name=q]" word}
                          {"[name=q]" submit}))
-    (quit)))
+    (quit))
+  (println "Done"))
