@@ -27,9 +27,13 @@
     (doall (take n (shuffle (line-seq rdr))))))
 
 (defn -main []
-  (doseq [platform [:mobile :pc]
-          [user pass pc-searches mobile-searches] config]
-    (println user platform)
+  (doseq [platform (shuffle [:mobile :pc])
+          [user pass pc-searches mobile-searches] (shuffle config)
+          :let [searches (case platform
+                           :mobile mobile-searches
+                           :pc pc-searches)]]
+
+    (println "***" user platform "***")
     (set-driver! (create-driver platform))
 
     (to "https://login.live.com")
@@ -38,12 +42,11 @@
                        {"[name=passwd]" submit})
 
     (to "https://www.bing.com")
-    (doseq [word (random-words (+ (rand-int 10) (case platform
-                                                  :mobile mobile-searches
-                                                  :pc pc-searches)))]
-      (Thread/sleep (+ (rand-int 1000) 500))
+    (doseq [word (random-words (+ (rand-int 10) searches))]
+      (Thread/sleep (+ (rand-int 2000) 1000))
       (quick-fill-submit {"[name=q]" clear}
                          {"[name=q]" word}
                          {"[name=q]" submit}))
     (quit))
-  (println "Done"))
+
+  (println "*** Done ***"))
