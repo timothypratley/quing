@@ -67,7 +67,7 @@
     (println "<")
 
     (when (= platform :pc)
-      (while (click-offer user)
+      (while (click-offer)
         (println "Earnt credit"))
       (to "http://www.bing.com/rewards/dashboard")
       (take-screenshot :file (str user ".png")))
