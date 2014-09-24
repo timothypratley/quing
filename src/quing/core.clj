@@ -1,6 +1,7 @@
 (ns quing.core
   (:require [clojure.edn :as edn]
             [clojure.java.io :as io]
+            [clojure.stacktrace :as stacktrace]
             [postal.core :as postal]
             [clj-webdriver.taxi :refer :all]
             [clj-webdriver.driver :refer [init-driver]])
@@ -35,11 +36,16 @@
     (io/delete-file (str user ".png"))))
 
 (defn click-offer []
-  (to "https://www.bing.com")
-  (click "[title=\"Notification Center\"]")
+  (to "https://www.bing.com/rewards/dashboard")
+  (click "[title=\"Bing Rewards\"]")
   (Thread/sleep 500)
   (switch-to-frame "[id=bepfm]")
   (when-let [e (find-element {:xpath "//a/div/div[contains(.,'Earn ')]"})]
+    (doto e click)))
+
+(defn click-dashboard-offer []
+  (to "https://www.bing.com/rewards/dashboard")
+  (when-let [e (find-element {:xpath "/div[contains(.,'0 of 1 credit')]"})]
     (doto e click)))
 
 (defn do-searches [user pass platform searches]
@@ -74,7 +80,8 @@
 
     (catch Exception e
       (println user platform "failed")
-      (println e))
+      (println e)
+      (stacktrace/print-stack-trace e))
 
     (finally (quit))))
 
