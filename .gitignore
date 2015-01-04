@@ -7,5 +7,8 @@ pom.xml.asc
 *.class
 *.log
 *.config
+*.iml
 /.lein-*
+/node_modules
 /.nrepl-port
+.idea
